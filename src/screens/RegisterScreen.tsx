@@ -37,6 +37,7 @@ export const RegisterScreen = ({navigation}:Props) => {
     Keyboard.dismiss();
     
     setModalVisible(true);
+    
     var timout = setTimeout(() => {
       singUp({
         nombre: name,

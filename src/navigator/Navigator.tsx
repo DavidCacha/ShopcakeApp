@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, {useState, useContext, useReducer} from 'react'
+import React, {useState, useContext, useReducer, useEffect} from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import { ProductosScreen } from '../screens/ProductosScreen';
 import { PerfilScreen } from '../screens/PerfilScreen';
 import { LoginScreen } from '../screens/LoginScreen';
@@ -22,7 +23,9 @@ export const Navigator = () => {
 
     const {status,rol,user, token} = useContext(AuthContext);
 
-    
+  useEffect(()=>{
+    SplashScreen.hide();
+  },[])
   return (
     <Stack.Navigator
     screenOptions={{
