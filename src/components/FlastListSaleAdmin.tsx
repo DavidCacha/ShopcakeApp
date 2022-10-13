@@ -1,5 +1,5 @@
 import React, { useEffect , useState} from 'react';
-import { Dimensions, FlatList, Image, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, FlatList, Image, Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSales } from '../hooks/useSales';
 import { ViewSale } from './ViewSale';
 import { Estado } from '../interfaces/appIterfaces';
@@ -8,27 +8,42 @@ import { PedidoAlone } from './PedidoAlone';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SearchSale } from './SearchSale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ViewSaleAdmin } from './ViewSaleAdmin';
 
 interface Props{
+  dataRefresh:any,
   params:  string, 
   datos: any;
 }
 
 const screenWidth =  Dimensions.get('window').width;
 
-export const FlatListSaleAdmin = ({params, datos}:Props) => {
-    const {top} =  useSafeAreaInsets();
+export const FlatListSaleAdmin = ({params, dataRefresh, datos}:Props) => {
+
+  const [saleFiltered, setSaleFiltered] = useState<any[]>([]);
 
 
-    const [term, setTerm] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  
+  const {top} =  useSafeAreaInsets();
+ 
+  const [term, setTerm] = useState('');
 
-  const navigation =useNavigation();
-
+  useEffect(()=> {
+    if(term.length === 0){
+      return setSaleFiltered([]);
+    }
+    setSaleFiltered(
+      datos.filter(
+        (date:any) => date.solicitante.toLocaleLowerCase()
+        .includes(term.toLocaleLowerCase())
+      )
+    );
+  }, [term])
   return (
     <View style={{backgroundColor:'white'}}>
      <SearchSale 
-      
-      //refresh={refresData}
+      refresh={dataRefresh}
       onDebounce= {(value)=> setTerm(value)}
       style={{position:'absolute',
       zIndex:999, 
@@ -39,45 +54,28 @@ export const FlatListSaleAdmin = ({params, datos}:Props) => {
         />
     <View style={{height:45}}></View> 
     <FlatList
-        data={datos}
+        data={term==='' ? datos : saleFiltered}
         numColumns={1}
         ListFooterComponent={
             <View style={{height:150}}></View>
         }
         keyExtractor={(sale)=> sale._id}
         renderItem={({item})=> 
-        <View style={styles.container}>
-          {
-                item.datos === 'Pagado' ? (
-                   <>
-                      <TouchableOpacity 
-                      style={styles.card}
-                      onPress={()=> navigation.navigate('PedidoAlone',{ id: item._id, name:item.producto_nombre})}
-                      >
-                        
-                          <ViewSale sale={item}/>
-                      </TouchableOpacity>
-                   </>
-                ) : 
-                
-                (
-                  <View style={styles.card}>
-                    
-                    <ViewSale sale={item}/>
-                  </View>
-                )
-          }
-            
+        <View style={styles.container}>  
+              <ViewSaleAdmin refresh={dataRefresh} sale={item}/>
         </View>
       }
         showsVerticalScrollIndicator={false}
     />  
+   
     </View>
   )
 }
 
 
 const styles = StyleSheet.create({ 
+  
+   
   
  
     container:{
@@ -86,20 +84,5 @@ const styles = StyleSheet.create({
       paddingHorizontal:10,
       marginTop:15,
       marginLeft:10
-    },
-    card:{
-      height:110,
-      width:'100%',
-      backgroundColor:'white',
-      borderRadius:50,
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 12,
-      },
-      shadowOpacity: 0.58,
-      shadowRadius: 16.00,
-  
-      elevation: 24,
     },
   });

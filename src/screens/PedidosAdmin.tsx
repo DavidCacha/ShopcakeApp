@@ -24,6 +24,11 @@ export const PedidosAdmin = () => {
 
   },[])
 
+  const refreshData = () => {
+    setModalVisible(true)
+    getSale();
+  }
+
   const querySale = (itemValue:string) => {
     
     setSelectedValue(itemValue);
@@ -32,13 +37,13 @@ export const PedidosAdmin = () => {
    //console.log(saleAll)
 
   return (
-    <View style={{flex:1, backgroundColor:'green'}}>
+    <View style={{flex:1, backgroundColor:'white'}}>
     <Picker
       style={{backgroundColor:'#850842', color:'white'}}
       dropdownIconColor='white'
       selectedValue={selectedValue}
       onValueChange={(itemValue, itemIndex) => {
-        querySale(itemValue)
+        querySale(itemValue) 
       }}>
       
       <Picker.Item  label="Pendiente de pago" value={'null'}  />
@@ -48,7 +53,7 @@ export const PedidosAdmin = () => {
     </Picker>
     {/*<Text>{selectedValue}</Text>*/}
    
-    <PedidoAdmin datos={saleAll} params={selectedValue}/>
+    <PedidoAdmin refresh={refreshData} datos={saleAll} params={selectedValue}/>
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"

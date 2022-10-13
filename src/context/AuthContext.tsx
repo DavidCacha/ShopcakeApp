@@ -54,7 +54,6 @@ export const AuthProvider = ({children}:any) => {
 
     } */}
     const singIn = async({ correo, contraseña }: LoginData ) => {
-        //console.log( correo, contraseña )
         try {  
             const { data } = await shopcakeApi.post<LoginResponse>('/login', { correo, contraseña });
             dispatch({ 
@@ -85,8 +84,6 @@ export const AuthProvider = ({children}:any) => {
                    
                 }
             });
-            console.log(data)
-            //await AsyncStorage.setItem('token', data.token );
         } catch (error:any) {
             console.log(error.response.data)
             dispatch({ 

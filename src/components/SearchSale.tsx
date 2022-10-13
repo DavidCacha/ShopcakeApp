@@ -4,14 +4,17 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { useState, useEffect } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { AddProduct } from './AddProduct';
+import { useSales } from '../hooks/useSales';
 
 interface Props {
-    //refresh: any,
+    refresh: any,
     onDebounce: (value:string) => void;
     style?: StyleProp<ViewStyle>
 }
 
-export const SearchSale = ({style, onDebounce}:Props) => {
+export const SearchSale = ({style, refresh, onDebounce}:Props) => {
+
+    const {loadSale} = useSales();
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -32,7 +35,7 @@ export const SearchSale = ({style, onDebounce}:Props) => {
         <View style={styles.textBackground}>
             <TextInput
             
-            placeholder='Filtrar pedido'
+            placeholder='Filtrar pedido por usuario'
             placeholderTextColor='#850842'
             style={{...styles.textInput, color:'#850842'}}
             autoCapitalize='none'

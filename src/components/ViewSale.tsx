@@ -1,20 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSales } from '../hooks/useSales';
 import { useNavigation } from '@react-navigation/native';
+import { useProducts } from '../hooks/useProducts';
 
 interface Props{
+  refreshData?:any;
     sale: any;
 }
-export const ViewSale = ({sale}:Props) => {
+export const ViewSale = ({refreshData,sale}:Props) => {
 
   const navigation = useNavigation();
   const {updateSaleUser, deleteSale} = useSales();
   const [timeIndicator, setTimeIndicator] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [deleteVisible, setdeleteVisible] = useState(false);
-  
+  const {getProductById, productoID} = useProducts();
+
+  useEffect(()=>{
+    getProductById(sale.producto_nombre);
+  },[])
+
   var id = sale._id;
   var solicitante = sale.solicitante;
   var producto_nombre = sale.producto_nombre;
@@ -38,10 +45,11 @@ export const ViewSale = ({sale}:Props) => {
   function timeSale(){
     setTimeIndicator(false);
     setdeleteVisible(false)
-    navigation.navigate('Productosuse')
+    //navigation.navigate('Productosuse')
   }
 
   const updateSale = () => {
+    //refreshData();
     setIsVisible(false)
     updateSaleUser(saleObject, id);
   }
@@ -65,7 +73,7 @@ export const ViewSale = ({sale}:Props) => {
       )
      }
      <View style={{marginTop:-3}}>              
-              <Text style={styles.text}>{sale.producto_nombre}</Text>
+              <Text style={styles.text}>{productoID?.nombre}</Text>
               <View >
               <Text style={{...styles.text, fontWeight:'bold', fontSize:15}}>Estatus de pago:  </Text>
               <Text style={{...styles.text, fontSize:15, color:'black'}}>{sale.datos}</Text>

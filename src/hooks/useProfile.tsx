@@ -1,13 +1,28 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { ProfileElement, Profile, Profileresul, Product } from '../interfaces/appIterfaces';
 import shopcakeApi from '../api/shopCake';
+import { ProfileRespnse } from '../interfaces/interfaceProfile';
+import { AuthContext } from '../context/AuthContext';
+import { PerfilResponse, Perfiles } from '../interfaces/saleInterface';
 
 export const useProfile = (name: any) => {
 
+  const {user} = useContext(AuthContext);
   const [profile, setProfile] = useState<ProfileElement>({}as ProfileElement);
   const [saveProfile, setSaveProfile] = useState<Product>({}as Product);
+  const [profiles, setProfiles] = useState<Perfiles[]>();
 
+  const getprofiles = async() => {
 
+    const resp = await shopcakeApi.get<PerfilResponse>(`/get_profiles`);
+    setProfiles(resp.data.perfiles);
+  }
+
+  const getprofile = async(id:string) => {
+
+    const resp = await shopcakeApi.get<ProfileRespnse>(`/get_profile/${id}`);
+    setProfile(resp.data.profile);
+  }
   const loadProfile = async() => {
     const resp = await shopcakeApi.get<Profile>(`/profile_search/${name}`);
     setProfile(resp.data.profiles[0]);
@@ -16,7 +31,6 @@ export const useProfile = (name: any) => {
   const deleteProfile = async(id:string) => {
     
     const resp = await shopcakeApi.delete(`//delete_profile//${id}`);
-    console.log(resp.data);
   }
 
   const updateProfile = async(profile: any) => {
@@ -26,7 +40,7 @@ export const useProfile = (name: any) => {
     delete profile['image'];
     delete profile['date'];
     const resp = await shopcakeApi.put(`/update_profile/${id}`, profile);
-   // console.log(resp.data);
+   
   }
 
   const addProfiles = async(obj:any) => {
@@ -35,10 +49,12 @@ export const useProfile = (name: any) => {
   }
 
   useEffect(()=>{
+    getprofiles();
+  },[])
+  useEffect(()=>{
     loadProfile();
   }, [])
-
   return {
-    profile, addProfiles, updateProfile
+    profile, profiles, addProfiles, updateProfile, getprofile, 
   }
 }

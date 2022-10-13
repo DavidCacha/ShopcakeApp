@@ -70,11 +70,9 @@ export const useSales = () => {
 
     const saveSaleUser = async(sale:any) => {
       const resp = await shopcakeApi.post<SaveSales>(`/save_sales`, sale);
-      console.log(resp.data);
     }
     const updateSaleUser = async(sale:any, id:string) => {
       const resp = await shopcakeApi.put<SaveSales>(`/update_sale/${id}`, sale);
-      console.log(resp.data);
     }
 
     const deleteSale = async(id:string) => {
@@ -82,6 +80,7 @@ export const useSales = () => {
     }
 
     return {
-      sale, saleAll, filterByStatus, saleById, getSale, saleId,  salesInMemoryId, saveSaleUser,updateSaleUser, deleteSale
+      sale, saleAll, filterByStatus, saleById, getSale, saleId, loadSale, salesInMemoryId, saveSaleUser,updateSaleUser, deleteSale
     }
 }
+

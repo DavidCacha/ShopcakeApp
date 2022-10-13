@@ -6,6 +6,8 @@ import { TabNavigator } from './src/navigator/TabNavigator';
 import { AuthProvider } from './src/context/AuthContext';
 import { ProfileProvider } from './src/context/ProfileContext';
 
+
+
 const AppState = ({children}:any) => {
   return(
     <AuthProvider>  
@@ -16,6 +18,7 @@ const AppState = ({children}:any) => {
 }
 
 const App = () => {
+  
   return (
     <NavigationContainer>
       <AppState>

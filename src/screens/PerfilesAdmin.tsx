@@ -1,63 +1,91 @@
-import React from 'react'
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, ScrollView, Dimensions, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FlatListUser } from '../components/FlatListUser';
+import { SearchInputs } from '../components/SearchInputs';
+import { useProfile } from '../hooks/useProfile';
+
+const screenWidth =  Dimensions.get('window').width;
+
 
 export const PerfilesAdmin = () => {
 
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'First Item',
-    }
-  ];
-  
-  const Item = ({ title }:any) => (
-    <FlatListUser/>
-  );
+  const {profiles} =useProfile('');
+  const [term, setTerm] = useState('');
+  const {top} =  useSafeAreaInsets();
+  const [profilesFiltered, setProfileFiltered] = useState<any[]>([]);
 
-  const renderItem = ({ item }:any) => (
-    <Item title={item.title} />
-  );
+  useEffect(()=> {
+    if(term.length === 0){
+      return setProfileFiltered([]);
+    }
+    setProfileFiltered(
+      profiles.filter(
+        (profile:any) => profile.nombre.toLocaleLowerCase()
+        .includes(term.toLocaleLowerCase())
+      )
+    );
+  }, [term])
   return (
     <View style={{flex:1, alignItems:'center', backgroundColor:'white', paddingHorizontal:10}}>
       <Text style={styles.title}>Perfiles registrados</Text>
-      <View style={styles.textBackground}>
-            <TextInput
-            placeholder='Buscar usuarios'
-            style={styles.textInput}
-            autoCapitalize='none'
-            autoCorrect={false}
-            //value={textValue}
-            //onChangeText={setTextValue}
-            />
-            <Icon
-            name='search-circle-outline'
-            size={30}
-            color='grey'
-            />
-        </View>
-       <ScrollView>
-       <SafeAreaView style={styles.container}>
+      <SearchInputs 
+       type='perfil'
+       refresh={()=>(console.log('jo'))}
+       onDebounce= {(value)=> setTerm(value)}
+       style={{position:'absolute',
+       zIndex:999, 
+       left:10,
+       width:screenWidth -20 ,
+       top: (Platform.OS === 'ios') ? top : top +10
+   }}
+      />
+      {
+        profilesFiltered.length === 0 && term !== '' && (
+          <View style={styles.viewProfile}>
+            <Text style={styles.textProfile}>No hay perfiles que coincidan con el nombre</Text>
+          </View>
+        )
+      }
+      
           <FlatList
-          numColumns={1}
-          style={{marginTop:-10}}
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          />
-       </SafeAreaView>
-       </ScrollView>
-
+        data={term === '' ? profiles : profilesFiltered}
+        numColumns={1}
+        ListFooterComponent={
+            <View style={{height:150}}></View>
+        }
+        keyExtractor={(profile)=> profile._id}
+        renderItem={({item})=> 
+        <View style={styles.container}>  
+          <FlatListUser datos={item}/>
+        </View>
+      }
+        showsVerticalScrollIndicator={false}
+    />  
        
+      
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  viewProfile:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    width:'100%',
+  },
+  textProfile:{
+    color:'#850642',
+    fontSize:18
+  },
   container: {
       //width:'95%'
-      marginTop:25
+      padding:5,
+      justifyContent:'center',
+      alignItems:'center',
+      marginTop:8
   },
   textBackground:{
       backgroundColor:'#F3F1F3',

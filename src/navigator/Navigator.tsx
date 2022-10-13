@@ -47,6 +47,7 @@ export const Navigator = () => {
               <Stack.Screen name= 'ProfileUser' component={ProfileUser}/>
               <Stack.Screen name='Productos' component={ProductosScreen}/>
               <Stack.Screen name='Carrito/Pedidos' component={Pedidos}/>
+
               </>
             )
           }

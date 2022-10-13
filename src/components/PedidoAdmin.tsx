@@ -12,14 +12,12 @@ import { FlatListSaleAdmin } from './FlastListSaleAdmin';
 const screenWidth =  Dimensions.get('window').width;
 
 interface Props{
+  refresh:any,
   datos: any;
   params: string;
 }
 
-export const PedidoAdmin = ({params, datos}:Props) => {
-  //console.log(datos)
-  const {rol}= useContext(AuthContext);
-
+export const PedidoAdmin = ({params, refresh, datos}:Props) => {
   
 
   const [productFiltered, setProductFiltered] = useState<Products[]>([]);
@@ -30,14 +28,11 @@ export const PedidoAdmin = ({params, datos}:Props) => {
 
   const [term, setTerm] = useState('');
 
-  console.log(params);
-  console.log(datos)
-
   useEffect(() => {
   }, [])
   
   const refresData = () =>{
-    loadProducts();
+    refresh();
   }
   useEffect(()=> {
     if(term.length === 0){
@@ -53,8 +48,13 @@ export const PedidoAdmin = ({params, datos}:Props) => {
   
   return (
     <>
-     
-      <FlatListSaleAdmin params={params} datos={datos}/>
+      {
+        datos.length === 0 ? (
+          <View style={{justifyContent:'center', alignItems:'center', marginTop:220}}>
+            <Text style={{color:'#850642', fontWeight:'bold', fontSize:25, textAlign:'center'}}>No hay pedidos solicitados por el momento</Text>
+          </View>
+        ) : ( <FlatListSaleAdmin dataRefresh={refresData} params={params} datos={datos}/>)
+      }      
     </>
   
   )

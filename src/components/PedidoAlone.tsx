@@ -16,13 +16,13 @@ export const PedidoAlone = ({navigation, route }:any) => {
 
     const {salesInMemoryId, saleById} = useSales();
 
-    const {getProductImage,dataProduct} = useProducts();
+    const {getProductById, productoID} = useProducts();
 
     var name = useRef<any>();
     
     useEffect(() => {
         saleById(route.params.id);
-       getProductImage(route.params.name);
+        getProductById(route.params.name);
     }, [])
 
     const navigate = () => {
@@ -38,7 +38,7 @@ export const PedidoAlone = ({navigation, route }:any) => {
 
                 </View>
                 <View style={{justifyContent:'center', alignItems:'center', backgroundColor:'white'}}>
-                   <FadeInImage uri={ `http://10.0.2.2:4444/api/product_image/${dataProduct}`}  style={{
+                   <FadeInImage uri={ `http://10.0.2.2:4444/api/product_image/${productoID?.image}`}  style={{
                     width:220, height:200, marginTop:0, marginLeft:0, marginBottom:8
                 }}/>
                    </View>

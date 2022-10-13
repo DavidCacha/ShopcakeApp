@@ -8,11 +8,12 @@ import { PedidoAlone } from './PedidoAlone';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props{
+  refresh?: any,
   params:  string, 
   datos: any;
 }
 
-export const FlatListSaleUser = ({params, datos}:Props) => {
+export const FlatListSaleUser = ({refresh, datos}:Props) => {
 
   const navigation =useNavigation();
 
@@ -36,7 +37,7 @@ export const FlatListSaleUser = ({params, datos}:Props) => {
                       onPress={()=> navigation.navigate('PedidoAlone',{ id: item._id, name:item.producto_nombre})}
                       >
                         
-                          <ViewSale sale={item}/>
+                          <ViewSale sale={item} refreshData={refresh}/>
                       </TouchableOpacity>
                    </>
                 ) : 

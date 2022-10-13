@@ -1,169 +1,129 @@
 import React, { useState } from 'react'
-import { Image, Text, View, TouchableOpacity, StyleSheet, TextInput, Modal } from 'react-native';
+import { Image, Text, View, TouchableOpacity, StyleSheet, TextInput, Modal, Alert, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { FadeInImage } from '../hooks/FadeImage';
+import { Perfiles } from '../interfaces/saleInterface';
+import { ProfileUsers } from './ProfileUsers';
+import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
-export const FlatListUser = () => {
+interface Props{
+  datos: Perfiles
+}
+
+export const FlatListUser = ({datos}:Props) => {
+
+  const navigation = useNavigation();
+
   const [isVisible, setIsVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const closeModal = () => {
+    setModalVisible(false)
+  }
 
   return (
-    <View style={styles.shadowView}>
-        <Image source={require('../assets/elon.webp')} style={{width:100,marginLeft:0, height:100, borderRadius:50}}/>
-        <View style={{marginLeft:15}}>
-            <Text style={{fontSize:28, fontWeight:'bold', color:'#850642'}}>Elon Musk</Text>
-            <Text style={{fontSize:18, fontWeight:'400'}}>Correo: elon@gmail.com</Text>
-            <TouchableOpacity 
-            onPress={()=> setIsVisible(true)} 
-            style={{borderRadius:45,backgroundColor:'#850642',justifyContent:'center', alignItems:'center', width:100}}
-            >
-                <Text style={{color:'white', fontWeight:'bold', padding:8}}>Ver mas</Text>
-            </TouchableOpacity>
-        </View>
-
-        <Modal
-        animationType='slide'
-        visible={isVisible}
+    <>
+    <TouchableOpacity onPress={()=>setModalVisible(true)} style={styles.container} >
+      <View style={{width:'50%', marginLeft:25}}>  
+      
+      <Text style={{color:'#850642', fontSize:16, fontWeight:'600'}}>Nombre:</Text>      
+      <Text>{datos.nombre}</Text>      
+      <View style={{flexDirection:'row'}}>
+      <Text style={{color:'#850642', fontSize:16, fontWeight:'600'}}>Contacto:</Text>
+      <Text>{datos.telefono}</Text>
+      </View>
+      </View>
+      {
+        datos.image ? (
+          <FadeInImage uri={ `http://10.0.2.2:4444/api/profile_image/${datos.image}`} style={{
+            width:'50%', height:90, marginLeft:-25
+        }}/>
+        ) : <Image source={require('../assets/profileDefault.jpg')} style={{
+          width:'25%', height:90, marginLeft:15}}/>
+      }
+     
+    </TouchableOpacity>
+    <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
         transparent={true}
-        >
-            <View style={{
-                flex:1,
-                backgroundColor:'rgba(0,0,0,0.8)',
-                justifyContent:'center',
-                alignItems:'center'
-            }}>
-                <View style={{
-                    width:400,
-                    height:350,
-                    padding:15,
-                    backgroundColor:'white',
-                    shadowOffset:{
-                        width:0,
-                        height:10
-                    },
-                    shadowOpacity:0.55,
-                    elevation:10,
-                    borderRadius:20                
-                }}>
-                    <View style={{ alignItems:'center' , justifyContent:'center'}}>
-                      <Text style={{fontSize:25,fontWeight:'bold', marginBottom:15}}>Realizar pago</Text>
-                    </View>
-                    <Text style={{fontSize:20, fontWeight:'300'}}>Numero de tarjeta:</Text>
-                    <TextInput                
-                        underlineColorAndroid='#850842'
-                        placeholder='Ingrese su numero de tarjeta'
-                        placeholderTextColor='#850842'
-                        keyboardType='numeric'
-                        selectionColor="#850842"
-                        autoCapitalize='none'
-                        autoCorrect={false}        
-                        
-                        style={{color:'#850842',fontSize:20, width: '100%',
-                                borderColor:'#850842', borderStyle:'solid',borderRadius:12
-                            
-                            }}
-                        //onChangeText={(value)=> onChange(value, 'email')}
-                        //value={email}
-                        //onSubmitEditing={onLogin}
-                    /> 
-                    <Text style={{fontSize:20, fontWeight:'300'}}>Nombre del propietario:</Text>
-                    <TextInput                
-                        underlineColorAndroid='#850842'
-                        placeholder='Ingrese su nombre'
-                        placeholderTextColor='#850842'
-                        keyboardType='default'
-                        selectionColor="#850842"
-                        autoCapitalize='none'
-                        autoCorrect={false}        
-                        
-                        style={{color:'#850842',fontSize:20, width: '100%',
-                                borderColor:'#850842', borderStyle:'solid',borderRadius:12
-                            
-                            }}
-                        //onChangeText={(value)=> onChange(value, 'email')}
-                        //value={email}
-                        //onSubmitEditing={onLogin}
-                    /> 
-                    <View style={{flexDirection:'row', width:'100%', justifyContent:'space-between'}}>
-                      <View>
-                        <Text style={{fontSize:20, fontWeight:'300', flexDirection:'row'}}>Fecha de expiracion:</Text>
-                        <TextInput                
-                            underlineColorAndroid='#850842'
-                            placeholder='06/12'
-                            placeholderTextColor='#850842'
-                            keyboardType='numbers-and-punctuation'
-                            selectionColor="#850842"
-                            autoCapitalize='none'
-                            autoCorrect={false}        
-                            
-                            style={{color:'#850842',fontSize:20, width: '40%',
-                                    borderColor:'#850842', borderStyle:'solid',borderRadius:12
-                                
-                                }}
-                            //onChangeText={(value)=> onChange(value, 'email')}
-                            //value={email}
-                            //onSubmitEditing={onLogin}
-                        /> 
-                      </View>
-                      <View>
-                        <Text style={{fontSize:20, fontWeight:'300', flexDirection:'row', marginRight:10}}>CVV</Text>
-                        <TextInput                
-                            underlineColorAndroid='#850842'
-                            placeholder='CVV'
-                            placeholderTextColor='#850842'
-                            keyboardType='numbers-and-punctuation'
-                            selectionColor="#850842"
-                            autoCapitalize='none'
-                            autoCorrect={false}        
-                            
-                            style={{color:'#850842',fontSize:20, width: '100%',
-                                    borderColor:'#850842', borderStyle:'solid',borderRadius:12, marginLeft:-5
-                                
-                                }}
-                            //onChangeText={(value)=> onChange(value, 'email')}
-                            //value={email}
-                            //onSubmitEditing={onLogin}
-                        /> 
-                      </View>
-                    </View>
-                    <TouchableOpacity
-                    style={{...styles.makeBuy, alignItems:'center',flexDirection:'row', justifyContent:'center'}}
-                    onPress={()=> setIsVisible(false)}
-                    >
-                       <Icon name='card-outline' size={30} style={{marginRight:-0}} color='white'/>
-                      <Text style={{...styles.text, color: 'white', padding:8 , fontSize:18, fontWeight:'bold'}}>Pagar</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </Modal>
-
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+            <ProfileUsers close={closeModal} profile={datos}/>
+      </Modal>
     </View>
+    </>
+    
   )
 }
 
 const styles = StyleSheet.create({
-  text:{
-    color:'#850842'
-  },
-  makeBuy:{
-    backgroundColor:'#850842',
-    borderRadius:15,
-    color: 'white', 
-    fontSize:19, 
-    padding:4
-  },
-  shadowView:{
-    width:380,
+  container:{
+    borderRadius:100,
+    alignItems:'center',
+    flexDirection:'row',
+    width:'98%',
+    height:100,
     backgroundColor:'white',
-    borderRadius:160, 
-    flexDirection:'row', 
-    marginBottom:15,
-    shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 6,
+    shadowColor: "black",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.85,
+      shadowRadius: 4,
+      elevation: 5
   },
-  shadowOpacity: 0.37,
-  shadowRadius: 7.49,
-
-  elevation: 12,
-    }
+  centeredView: {
+    flex: 1,
+    zIndex:99,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 17,
+  },
+  modalView: {
+    margin: 20,
+    width:'50%',
+    height:'85%',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 25,
+    right:15,
+    top:10,
+    padding: 0,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    position:'absolute',
+    left:110,
+    backgroundColor: "white",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });

@@ -26,10 +26,7 @@ export const TabNavigator = () => {
         
         //color:'white'
       },
-      tabBarStyle: {
-        //en ios es shadowColor:"transparent"
-        //backgroundColor:'#850842',
-        
+      tabBarStyle: {        
         elevation: 0,
       },
       tabBarIcon: ({color}) => {

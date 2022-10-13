@@ -9,7 +9,6 @@ interface Props {
 export const CustomSwitch = ({isOn, onChange}:Props) => {
     const [isEnabled, setIsEnabled] = useState(isOn);
     const toggleSwitch = () => {
-        console.log(isEnabled)
         setIsEnabled(!isEnabled);
         onChange(!isEnabled)
     };

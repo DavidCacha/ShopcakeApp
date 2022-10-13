@@ -5,21 +5,14 @@ import { AuthContext } from '../context/AuthContext'
 import { useProfile } from '../hooks/useProfile'
 import { useNavigation } from '@react-navigation/native'
 import { ProntEditProfile } from './ProntEditProfile';
+import { Perfiles } from '../interfaces/saleInterface';
 
-interface Props {
+interface Props{
+    close:any,
+    profile: any
 }
 
-
-export const ProfileUser = () => {
-
-  
-  
-  const {user} = useContext(AuthContext);
-
-  const {profile} = useProfile(user?.nombre);
-
- 
-
+export const ProfileUsers = ({profile, close}:Props) => {
 
   return (
     <ScrollView>
@@ -29,6 +22,9 @@ export const ProfileUser = () => {
           <Text style={{...styles.textTitle, textAlign:'center', marginTop:15}}>{profile.nombre}</Text>
         </View>
         <View>
+            <TouchableOpacity style={styles.close} onPress={()=> close()}>
+              <Text style={{color:'white', fontSize:20, padding:8}}>Regresar</Text>
+            </TouchableOpacity>
             <View style={styles.contentImage}>
             {
                 profile.image ? (
@@ -83,6 +79,13 @@ export const ProfileUser = () => {
 }
 
 const styles = StyleSheet.create({
+    close:{
+      position:'absolute',
+      marginLeft:-90,
+      marginTop:25,
+      backgroundColor:'#850642',
+      borderRadius:15
+    },
     logout:{
       position:'absolute',
       zIndex:9999,
@@ -97,11 +100,12 @@ const styles = StyleSheet.create({
     profile: {
       backgroundColor:'white',
       flex:1,
+      paddingHorizontal:5,
       justifyContent:'center',
       alignItems:'center'
     },
     textTitle:{
-      fontSize:35,
+      fontSize:28,
       fontWeight:'500',
       color:'#850842'
     },

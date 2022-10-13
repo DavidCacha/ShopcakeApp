@@ -13,8 +13,7 @@ export const PerfilScreen = () => {
 
 
   const {profile} = useProfile(user?.id)
-
-  console.log(Object.keys(profile).length)
+  console.log(profile)
   
   return (
     <ScrollView>

@@ -19,7 +19,6 @@ export const DrawerClient = () => {
 
     const {profile} = useProfile(user?.nombre);
 
-    console.log(profile)
     return (
         <Drawer.Navigator
         drawerContent={()=> <Perfil/>}
@@ -36,6 +35,7 @@ export const DrawerClient = () => {
             <Drawer.Screen name='Productos en venta' component={ProductosScreen}/>
             <Drawer.Screen name='Carrito' component={Pedidos}/>
             <Drawer.Screen name='Ajustes de perfil' component={PerfilScreen}/>
+
         </Drawer.Navigator>
     )
 }

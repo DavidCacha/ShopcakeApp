@@ -1,17 +1,21 @@
-import React, { useDebugValue } from 'react'
+import React, { useContext, useDebugValue } from 'react'
 import { Text, View, StyleSheet, ActivityIndicator, StyleProp, ViewStyle, TextInput, TouchableOpacity, Modal, Alert, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useState, useEffect } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { AddProduct } from './AddProduct';
+import { AuthContext } from '../context/AuthContext'; 
 
 interface Props {
+    type?:string,
     refresh: any,
     onDebounce: (value:string) => void;
     style?: StyleProp<ViewStyle>
 }
 
-export const SearchInputs = ({style, onDebounce, refresh}:Props) => {
+export const SearchInputs = ({style, onDebounce, type, refresh}:Props) => {
+
+    const {rol} = useContext(AuthContext);
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -26,13 +30,12 @@ export const SearchInputs = ({style, onDebounce, refresh}:Props) => {
     useEffect(() => {
         onDebounce(deboncedValue)
     }, [deboncedValue])
-
   return (
     <View style={{...styles.container, ...style as any}}>
-        <View style={styles.textBackground}>
+        <View style={rol === 'Administrador' ? styles.textBackground : {...styles.textBackground, width:'100%'}}>
             <TextInput
             
-            placeholder='Buscar producto'
+            placeholder={type === 'perfil'? 'Buscar perfil' : 'Buscar producto'}
             placeholderTextColor='#850842'
             style={{...styles.textInput, color:'#850842'}}
             autoCapitalize='none'
@@ -45,9 +48,13 @@ export const SearchInputs = ({style, onDebounce, refresh}:Props) => {
             size={35}
             color='#850842'
             />
-            <TouchableOpacity style={styles.add} onPress={()=>setModalVisible(true)}>
-                <Icon name='add-outline' color='white' size={35}/>
-            </TouchableOpacity>
+           {  
+              rol === 'Administrador' && (
+                <TouchableOpacity style={styles.add} onPress={()=>setModalVisible(true)}>
+                    <Icon name='add-outline' color='white' size={35}/>
+                </TouchableOpacity>
+              )
+           }
         </View>
         <Modal
         animationType="slide"

@@ -1,18 +1,24 @@
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Text, View, ScrollView, StyleSheet,TouchableOpacity } from 'react-native';
 import { FlatListSaleUser } from '../components/FlatListSaleUser';
 import { PedidosState } from '../components/PedidosState';
 import { useSales } from '../hooks/useSales';
+import { AuthContext } from '../context/AuthContext';
+import { useProfile } from '../hooks/useProfile';
+import shopcakeApi from '../api/shopCake';
 
 export const Pedidos = () => {
 
-  const {sale, filterByStatus} = useSales();
+  const {sale, filterByStatus, loadSale} = useSales();
 
   const [selectedValue, setSelectedValue] = useState("Pendientes de pago");
 
-  
+  const reloadQuery = () =>{
+    loadSale();
+  }
 
+  
   return (
     <View style={{flex:1, backgroundColor:'white'}} >
        <Picker
@@ -35,7 +41,7 @@ export const Pedidos = () => {
           <View style={{justifyContent:'center', alignItems:'center', marginTop:220}}>
             <Text style={{color:'#850642', fontWeight:'bold', fontSize:25, textAlign:'center'}}>No hay pedidos solicitados por el momento</Text>
           </View>
-        ) : (      <FlatListSaleUser params={selectedValue} datos={sale}/> 
+        ) : (      <FlatListSaleUser refresh={reloadQuery} params={selectedValue} datos={sale}/> 
 )
       }
           

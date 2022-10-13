@@ -6,9 +6,13 @@ export const useProducts = () => {
 
 const [simpleProductList, setSimpleProductList] = useState<any[]>([]);
 
+const [productoSearch, setProductSearch] = useState<any>();
+
 const [productoID, setProductId] = useState<ProductID>();
 
 const [dataProduct, setDataProduct] = useState<any>()
+
+const [image, setImage] = useState();
 
 const url = '/get_products';
 
@@ -30,6 +34,15 @@ const loadProducts = async() => {
     setSimpleProductList(resp.data.products);
     
 }
+
+const getProductBySearch = async(name:string) => {
+  const resp = await shopcakeApi.get<ProducttResponseAll>(`/search-product/${name}`);
+  
+  console.log(resp.data.products);
+  
+  
+}
+
 
 const getProductById = async(id:any) => {
   const resp = await shopcakeApi.get<ProductByID>(`/get-product/${id}`);
@@ -60,15 +73,16 @@ const uploadImageProduct = async( data:any, id: string ) => {
         headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    console.log(resp.data);
 
 
 } catch (error: any) {
     console.log(error.response);
 }
 
+
 }
+
   return {
-    simpleProductList, dataProduct, productoID, deleteProduct,saveProducts,  loadProducts, ProductUpdate, uploadImageProduct, getProductById
+    simpleProductList, dataProduct, productoSearch, productoID,getProductBySearch, deleteProduct,saveProducts,  loadProducts, ProductUpdate, uploadImageProduct, getProductById
   }
 }

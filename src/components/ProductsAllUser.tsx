@@ -19,7 +19,7 @@ const navigation = useNavigation();
 
 const {user} = useContext(AuthContext);
 
-const {profile} = useProfile(user?.id);
+const {profile} = useProfile(user?.nombre);
 
 const {saveSaleUser} = useSales();
 
@@ -32,8 +32,11 @@ const {cantidadProduct, onChange} = useForm({
 var precioCantidad = parseInt(cantidadProduct);
 var precioCliente = parseInt(producto.precio);
 
+
+
 var solicitante = user?.nombre;
-var producto_nombre = producto.nombre;
+var id_solicitante = profile._id;
+var producto_nombre = producto._id;
 var cantidad = precioCantidad.toString();
 var telefono = producto.precio.toString();
 var datos = "En proceso de pago";
@@ -44,6 +47,7 @@ const sale = {
     solicitante,
     producto_nombre,
     cantidad,
+    id_solicitante,
     telefono,
     datos,
     estado,

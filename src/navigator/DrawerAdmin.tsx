@@ -4,6 +4,7 @@ import { ConfiguracionesScreen } from '../screens/ConfiguracionesScreen';
 import { Graficas } from '../screens/Graficas';
 import { PedidosAdmin } from '../screens/PedidosAdmin';
 import { PerfilesAdmin } from '../screens/PerfilesAdmin';
+import { PerfilScreen } from '../screens/PerfilScreen';
 import { ProductosScreen } from '../screens/ProductosScreen';
 
 const Drawer = createDrawerNavigator();
@@ -27,6 +28,8 @@ export const DrawerAdmin = () => {
         <Drawer.Screen  name='Pedidos' component={PedidosAdmin}/>        
         <Drawer.Screen name='Perfiles' component={PerfilesAdmin}/>
         <Drawer.Screen name='Configuraciones' component={ConfiguracionesScreen}/>
+        
+
         <Drawer.Screen name='Graficas' component={Graficas}/>
     </Drawer.Navigator>
   )
